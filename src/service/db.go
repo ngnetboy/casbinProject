@@ -52,7 +52,10 @@ func ConnecDB() {
 	//初始化casbin的gorm适配器
 	adapter := gormadapter.NewAdapterByDB(db)
 	enForcer = casbin.NewEnforcer("D:/code/golang/casbinProject/src/conf/restModel.conf", adapter)
-	enForcer.AddPolicy("admin", "/*", "(GET)|(POST)|(DELETE)")
+	ok := enForcer.HasPolicy("admin", "/*", "(GET)|(POST)|(DELETE)")
+	if !ok {
+		enForcer.AddPolicy("admin", "/*", "(GET)|(POST)|(DELETE)")
+	}
 	enForcer.LoadPolicy()
 }
 
